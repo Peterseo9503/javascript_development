@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.7.1.js"
+        integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4=" crossorigin="anonymous"></script>
+    <style>
+        body,
+        html {
+            height: 100%;
+            margin: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        F #layout {
+            max-width: 40vw;
+            /* display: flex; */
+            box-sizing: border-box;
+            margin: auto;
+            /* justify-content: center; */
+            align-items: center;
+             height: 100%;
+            border: 2px solid green;
+        }
+
+        #circle {
+            display: flex;
+        }
+
+        #layout2 {
+            border: 2px solid green;
+            flex: 1;
+        }
+
+        #layout3 {
+            border: 2px solid rgb(0, 51, 128);
+            flex: 1;
+        }
+    </style>
+    <script>
+        document.addEventListener('DOMContentLoaded', (event) => {
+
+            let temp = document.querySelector('#temp');
+            let min = document.querySelector('#min');
+            let max = document.querySelector('#max');
+            let wind = document.querySelector('#wind');
+            let weather = document.querySelector('#weather');
+            let icon = document.querySelector('#icon');
+
+            let icon_url = "https://openweathermap.org/themes/openweathermap/assets/vendor/owm/img/widgets/";
+
+            axios.get('https://api.openweathermap.org/data/2.5/find?q=Seoul&units=metric&appid=7d96bc5108f52b80e2d9075a369b9f35')
+                .then(function (response) {
+                    console.log(response.data);
+                    let wdata = response.data.list[0];
+                    let exdata = response.data.list[0].weather[0];
+
+                    temp.innerText = (wdata.main.temp).toFixed(1) + "°C";
+                    min.innerText = wdata.main.temp_min;
+                    max.innerText = wdata.main.temp_max;
+                    wind.innerText = wdata.wind.speed;
+
+                    weather.innerText = exdata.main + "," + exdata.description;
+                    icon.setAttribute('src', icon_url + exdata.icon + ".png")
+                    console.log(exdata.icon);
+
+                })
+                .catch(function (error) {
+                    console.log(error);
+                }).then(function () { });
+
+        })
+    </script>
+</head>
+
+<body>
+    <div id="layout">
+        <h1>한국, 서울의 현재 날씨</h1>
+        <div id="circle">
+
+            <hr>
+            <div id="layout2"><img id="icon"></div>
+            <div id="layout3">
+                <h2><span id="temp"> </span></h2> <br>
+                <h3><span id="weather"></span></h3>
+                <h4><span id="max"></span>°C</h4>
+                <h4><span id="min"></span>°C</h4>
+                <h4><span id="wind"></span>m/s</h4>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>
