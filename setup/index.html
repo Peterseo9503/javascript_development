@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Video</title>
+
+  <!-- styles -->
+  <link rel="stylesheet" href="styles.css" />
+</head>
+
+<body>
+  <!-- preloader -->
+
+  <div class="preloader">
+    <img src="preloader.gif" alt="preloader" class="preloader__item" />
+  </div>
+  <!-- header -->
+
+  <header>
+    <!-- 비디오 요소에 속성값들이 있다. 
+      controls: 비디오에 재생, 일시정지, 볼륨 조절 등의 컨트롤을 표시합니다.
+      muted: 비디오를 음소거 상태로 설정합니다.
+      autoplay: 비디오를 자동으로 재생합니다.
+      loop: 비디오를 반복 재생합니다.-->
+    <video controls muted autoplay loop class="video-container">
+
+      <source src="./video.mp4" type="video/mp4" />
+    </video>
+    <h1>video project</h1>
+    <!-- video switch -->
+    <button class="switch-btn">
+      <span>play</span>
+      <span>pause</span>
+      <span class="switch"></span>
+    </button>
+  </header>
+  <!-- javascript -->
+  <script src="app.js"></script>
+</body>
+
+</html>
