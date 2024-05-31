@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        .list {
+            border: 2px solid black;
+        }
+
+        form {
+            max-width: 300px;
+            margin: auto;
+        }
+
+        fieldset {
+            padding: 30px;
+        }
+
+        p>input {
+            float: right;
+        }
+
+        .hidden-btn {
+            display: none;
+        }
+
+        .show-btn {
+            display: block;
+        }
+    </style>
+</head>
+
+<body>
+    <form action="#" method="post">
+        <fieldset>
+            <legend>type 속성</legend>
+            <p>ID<input type="text"></p>
+            <p>PW <input type="password"></p>
+            <p>검색 <input type="search"> </p>
+            <p>이메일 <input type="email"> </p>
+            <p>전화번호 <input type="tel"> </p>
+            <p>컬러선택 <input type="color"> </p>
+            <p>수량 <input type="number" min="1" max="10" value="1"> </p>
+            <p>만족도 <input type="range" min="1" max="10" value="1"> </p>
+            <p>예 <input type="radio" name="receive" checked>
+                아니오<input type="radio" name="receive"></p>
+            <span>
+                <label><input type="checkbox" name="hobby" value="hiking"> 등산</label>
+                <label><input type="checkbox" name="hobby" value="fishing"> 낚시</label>
+                <label><input type="checkbox" name="hobby" value="fitness"> 헬스</label>
+                <label><input type="checkbox" name="hobby" value="reading"> 독서</label>
+                <label><input type="checkbox" name="hobby" value="movies"> 영화감상</label>
+                <label><input type="checkbox" name="hobby" value="gaming"> 게임</label>
+            </span>
+            <p><input type="submit">전송</p>
+            <p><input type="reset">취소</p>
+            <p><input type="button">확인</p>
+            <p><button id="btn"><input type="image" src="../image/logo.jpg" alt=""></button> </p>
+            <p><input type="file"></p>
+
+
+
+            <!--  *************************************************************               -->
+
+            <p><input type="text" placeholder="리스트넣고싶은값 입력하세요" id="list-value"></p>
+            <p><input type="button" id="listAddBtn" value="리스트추가버튼"></p>
+            <p><input type="button" id="listRemoveBtn" value="리스트전체제거버튼"></p>
+
+        </fieldset>
+        <div id="list-container">
+            <article> </article>
+        </div>
+        <header></header>
+    </form>
+</body>
+
+<script>
+    const $btn = document.querySelector("#btn");
+    const $header = document.querySelector("header");
+    //인풋요소의 값들을 모두 받아온다.
+    const inputs = document.querySelectorAll("input");
+    const mc = 3;
+    let tc = 0;
+
+
+    const inputCheckBox = document.querySelectorAll('input[type="checkbox"]');
+
+    for (i of inputCheckBox) {
+        //아 !! 두번째 매개변수값에 함수값이 아니라 함수() 실행문을 쓰면, 즉시
+        //실행되고 이벤트 리스너가 기다리지 않으니까???? 비동기 만들기 위해서 는
+        //무조건 함수를 적어줘야함.  함수 참조값 넣어주기 .
+        i.addEventListener("click", cc);
+
+
+    }
+    //**이벤트 리스너가 생성될때 사용하는 함수는 첫번째 매개변수로 이벤트의 객체를 받는다**
+    function cc(event) {
+        //외부 에 함수가 있으니까 ff가 체크박스 누구를 지정하고 있는지 모르겠지.
+        const ff = event.target;
+        if (ff.checked) {
+            ++tc;
+        } else {
+            --tc;
+        }
+        if (tc > mc) {
+            alert("3개 만 선택해 주세요!");
+            ff.checked = false;
+            tc -= 1;
+        }
+        console.log(`tc값 = ${tc}`);
+    }
+
+
+    btn.addEventListener("click", function (e) {
+        e.preventDefault();
+        makeiteasy()
+    });
+
+    function makeiteasy() {
+        inputs.forEach(function (input) {
+            $header.innerHTML += input.type + " = " + input.value + "<br>";
+        })
+    }
+
+
+
+    // 1. input box안에 있는 값을 div list-container안에 article형식으로 넣어주기.
+    // 2. 클리어 버튼 추가하고 누르면 아티클 전체 삭제하기.
+    // 3. localStorage 
+    const listValue = document.querySelector("#list-value");
+    const listAddBtn = document.querySelector("#listAddBtn");
+    const listContainer = document.querySelector("#list-container");
+    const listRemoveBtn = document.querySelector("#listRemoveBtn");
+
+
+
+    listAddBtn.addEventListener('click', () => {
+        const value = listValue.value;
+
+        const element = document.createElement("article");
+        //키값부터 확실히 현재 날짜의  뭐빼기 뭐했더라.. 
+        const id = new Date().getTime().toString();
+        element.setAttribute("id", id);
+        element.classList.add("list");
+        element.innerHTML = `<p class="title">${value}</p>
+            <div class="btn-container">
+              <!-- edit btn -->
+              <button type="button" class="edit-btn">
+                <i class="fas fa-edit"></i>
+              </button>
+              <!-- delete btn -->
+              <button type="button" class="delete-btn">
+                <i class="fas fa-trash"></i>
+              </button>
+            </div>
+          `;
+
+        listContainer.appendChild(element);
+        listValue.value = "";
+        listValue.focus();
+
+        listRemoveBtn.classList.add("show-btn");
+        localStorage.setItem(id, value);
+        console.log(id, localStorage.getItem(id));
+    });
+
+
+    listRemoveBtn.addEventListener("click", () => {
+        const lists = document.querySelectorAll('article');
+
+        lists.forEach(function (item) {
+            listContainer.removeChild(item);
+            listValue.focus();
+        });
+        listRemoveBtn.classList.remove("show-btn");
+        listRemoveBtn.classList.add("hidden-btn");
+    });
+
+    window.addEventListener("DOMContentLoaded",setupItems);
+
+    function setupItems() {
+        let items = getLocalStorage();
+
+        items.forEach(function(item){ 
+            const value = item.value;
+
+        const element = document.createElement("article");
+        
+        const id = item.id;
+        element.setAttribute("id", id);
+        element.classList.add("list");
+        element.innerHTML = `<p class="title">${value}</p>
+            <div class="btn-container">
+              <!-- edit btn -->
+              <button type="button" class="edit-btn">
+                <i class="fas fa-edit"></i>
+              </button>
+              <!-- delete btn -->
+              <button type="button" class="delete-btn">
+                <i class="fas fa-trash"></i>
+              </button>
+            </div>
+          `;
+        }
+        );
+    }
+
+
+</script>
+
+</html>
