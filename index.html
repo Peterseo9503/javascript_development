@@ -28,11 +28,11 @@
 </body>
         <script>
             const $a = document.querySelectorAll("a");
-            let i = i;
-            $a.forEach((a)=>{
-                a.textContent = `i : ${a.textContent}`
+            let i = 1;
+            $a.forEach( (a)=>{
+                a.innerHTML = `${i} : ${a.innerHTML}`
                 i++;
             }
-            )
+            );
         </script>
 </html>
